@@ -39,9 +39,10 @@ async function run() {
         })
 
         app.get('/movies', async (req, res) => {
-            const cursor = movieCollection.find().sort({ rating: -1 }).limit(6);
+            const limit = parseInt(req.query.limit) || 0;
+            const cursor = movieCollection.find().sort({ rating: -1 }).limit(limit);
             const result = await cursor.toArray();
-            res.send(result)
+            res.send(result);
         })
 
         await client.db("admin").command({ ping: 1 });
