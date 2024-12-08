@@ -31,6 +31,7 @@ async function run() {
         const database = client.db('moviesDB');
         const movieCollection = database.collection('movies')
         const subscriberCollection = database.collection('subscribers')
+        const favoriteMovieCollection = database.collection('favoriteMovie')
 
         app.post('/movies', async (req, res) => {
             const movie = req.body;
@@ -44,11 +45,18 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/favoriteMovie', async (req, res) => {
+            const favoriteMovie = req.body;
+            const result = await favoriteMovieCollection.insertOne(favoriteMovie);
+            res.send(result);
+        })
+
         app.get('/subscribers', async (req, res) => {
             const cursor = subscriberCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
+
 
         app.get('/movies', async (req, res) => {
             const limit = parseInt(req.query.limit) || 0;
