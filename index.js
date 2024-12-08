@@ -63,6 +63,21 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/favoriteMovies/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email }
+            const favMovies = await favoriteMovieCollection.find(query).toArray();
+            res.send(favMovies)
+        })
+
+        app.delete('/favoriteMovies/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId (id) }
+            const result = await favoriteMovieCollection.deleteOne(query);
+            res.send(result)
+          })
+      
+
         app.get('/subscribers', async (req, res) => {
             const cursor = subscriberCollection.find();
             const result = await cursor.toArray();
