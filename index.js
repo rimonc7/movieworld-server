@@ -45,9 +45,21 @@ async function run() {
             res.send(result)
         })
 
-        app.post('/favoriteMovie', async (req, res) => {
-            const favoriteMovie = req.body;
-            const result = await favoriteMovieCollection.insertOne(favoriteMovie);
+        app.post('/favoriteMovies', async (req, res) => {
+            const { email, movie } = req.body;
+            const existingMovie = await favoriteMovieCollection.findOne({ email, movie });
+
+            if (existingMovie) {
+                return res.status(409).send({ message: 'Movie already added as favorite' });
+            }
+            const result = await favoriteMovieCollection.insertOne({ email, movie });
+            res.send(result);
+        });
+
+
+        app.get('/favoriteMovies', async (req, res) => {
+            const cursor = favoriteMovieCollection.find();
+            const result = await cursor.toArray();
             res.send(result);
         })
 
