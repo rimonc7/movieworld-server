@@ -25,9 +25,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
-
-
         const database = client.db('moviesDB');
         const movieCollection = database.collection('movies')
         const subscriberCollection = database.collection('subscribers')
@@ -118,10 +115,8 @@ async function run() {
             res.send(movie)
         })
 
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    
     } finally {
-        // await client.close();
     }
 }
 run().catch(console.dir);
